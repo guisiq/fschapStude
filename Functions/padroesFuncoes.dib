@@ -1,0 +1,46 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"name":"csharp","aliases":[]},{"name":"vscode","languageName":null,"aliases":["frontend"]}]}}
+
+#!fsharp
+
+let add2 a = a + 2
+let multiply3 a = a * 3 
+let addAndMultiply a =
+    let sum = add2 a
+    let product = multiply3 sum
+    product
+
+printfn "%i" (addAndMultiply 2) // 12
+
+#!markdown
+
+### usando compossicao 
+
+#!fsharp
+
+let add2 a = a + 2
+let multiply3 a = a * 3 
+let addAndMultiply = add2 >> multiply3
+
+printfn "%i" (addAndMultiply 2) // 12
+
+//A função combinada addAndMultiply() aplica as funções que a compõem da esquerda para a direita. Neste exemplo, add2() ocorre primeiro e multiply3() por últim
+
+#!fsharp
+
+let add2 a = a + 2
+let multiply3 a = a * 3 
+// let addAndMultiply = add2 >> multiply3
+
+printfn "%i" (add2 2 |> multiply3 ) // 12
+
+#!fsharp
+
+let list = [4; 3; 1]
+let sort (list: int list) = List.sort list
+let print (list: int list)= List.iter(fun x-> printfn "item %i" x) list
+
+list 
+|> sort 
+|> print // item 1 item 3 item 4

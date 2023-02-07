@@ -1,0 +1,50 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"name":"fsharp","languageName":"F#","aliases":["f#","F#"]},{"name":"vscode","aliases":["frontend"],"languageName":null}]}}
+
+#!markdown
+
+##Criar funções
+
+#!fsharp
+
+let add a b = a + b 
+add 1 2 
+
+#!fsharp
+
+let addAndMultiply a b c = 
+    let sum = a + b
+    let product = sum * c
+    product
+addAndMultiply 1 2 3 
+
+#!fsharp
+
+let add a b = a + b
+// let sum = add 2 2 
+let concat = add "hello" "world" // will give compilation error
+
+#!fsharp
+
+let cardFace card = 
+   let no = card % 13
+   if no = 1 then "Ace"
+   elif no = 0 then "King"
+   elif no = 12 then "Queen"
+   elif no = 11 then "Jack"
+   else string no
+
+#!markdown
+
+Adicionar tipos
+
+#!fsharp
+
+let cardFace (card:int) :string = 
+    let no = card % 13
+    if no = 1 then "Ace"
+    elif no = 0 then "King"
+    elif no = 12 then "Queen"
+    elif no = 11 then "Jack"
+    else string no
