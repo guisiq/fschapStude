@@ -9,4 +9,10 @@
     <Compile Include="Program.fs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="AgileObjects.ReadableExpressions" Version="4.0.0" />
+    <PackageReference Include="MathNet.Symbolics" Version="0.24.0" />
+    <PackageReference Include="NJection.LambdaConverter" Version="1.0.1" />
+  </ItemGroup>
+
 </Project>
