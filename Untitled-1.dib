@@ -1,0 +1,21 @@
+#!csharp
+
+using System;
+System.Int32 b = 123; // a is an object
+display(a);
+
+#!fsharp
+
+#!share --from csharp a
+
+#!csharp
+
+a = 20
+
+#!fsharp
+
+#!share --from csharp b
+
+#!fsharp
+
+let mutable b 
