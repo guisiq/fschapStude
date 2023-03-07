@@ -1,0 +1,162 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"name":"fsharp","aliases":["f#","F#"],"languageName":"F#"},{"name":"sql","aliases":[],"languageName":"SQL"},{"name":"vscode","aliases":["frontend"]},{"name":".NET","aliases":[]},{"name":"csharp","aliases":["c#","C#"],"languageName":"C#"},{"name":"html","aliases":[],"languageName":"HTML"},{"name":"javascript","aliases":["js"],"languageName":"JavaScript"},{"name":"kql","aliases":[],"languageName":"KQL"},{"name":"mermaid","aliases":[],"languageName":"Mermaid"},{"name":"pwsh","aliases":["powershell"],"languageName":"PowerShell"},{"name":"value","aliases":[]},{"name":"webview","aliases":[]}]}}
+
+#!fsharp
+
+let cards = [ 0 .. 5 ]
+
+#!fsharp
+
+let drawCard (list:int list) = 
+    printfn "%i" list.Head
+    list.Tail 
+
+#!fsharp
+
+let result = cards 
+                |> drawCard 
+                |> drawCard 
+                |> drawCard 
+                |> drawCard 
+                |> drawCard 
+                |> drawCard // 0 1
+
+#!fsharp
+
+let cards2 = drawCard  cards
+
+#!fsharp
+
+let hand = []
+
+let drawCard2 (tuple: int list * int list) = 
+    let deck = fst tuple
+    let draw = snd tuple
+    let firstCard = deck.Head
+    printfn "%i" firstCard
+
+    let hand = 
+        draw
+        |> List.append [firstCard]
+
+    (deck.Tail, hand)
+
+#!fsharp
+
+let d, h = (cards, hand) 
+                        |> drawCard2 
+                        |> drawCard2
+                        |> drawCard2
+
+printfn "Deck: %A Hand: %A" d h // Deck: [2; 3; 4; 5] Hand: [1; 0]
+
+#!markdown
+
+## Executar operações em listas
+
+#!fsharp
+
+List.iter(fun i -> printfn "%i" i) cards // 1 2 3 4 5
+
+#!fsharp
+
+for i in cards do printfn "%i" i
+
+#!fsharp
+
+type Person = { FirstName: string; LastName: string  }
+let people = [
+   { FirstName="Albert"; LastName= "Einstein" }
+   { FirstName="Marie"; LastName="Curie" }
+]
+let nobelPrizeWinners = List.map (fun person -> person.FirstName + person.LastName) people 
+printfn "%A" nobelPrizeWinners // ["Albert Einstein"; "Marie Curie"]
+
+#!fsharp
+
+let cards = [ 1 .. 5 ]
+let filteredList = List.filter(fun i-> i % 2 = 0) cards
+List.iter(fun i -> printfn "item %i" i) filteredList // item 2 item 4
+
+#!fsharp
+
+let list = [2; 1; 5; 3]
+let sortedList = List.sort list // 1 2 3 5 
+
+#!fsharp
+
+let fruits = ["Banana"; "Apple"; "Pineapple"]
+let sortedFruits = List.sortBy (fun (fruit : string) -> fruit.Length) fruits // Apple, Banana, Pineapple// assume a type like so
+List.iter(fun i -> printfn "item %s" i)  sortedFruits 
+
+#!fsharp
+
+type MagicCreature = { Name : string; Level: int; Attack: int }
+let creatures = [
+   { Name="Dragon"; Level=2; Attack=20 }
+   { Name="Orc"; Level=1; Attack=5 }
+   { Name="Demon"; Level=2; Attack=10 } 
+]
+
+// comparison function, -1 = less than, 1 = larger than, 0 = equal
+let compareCreatures c1 c2 =
+     if c1.Level < c2.Level then -1
+     else if c1.Level > c2.Level then 1
+     else if c1.Attack < c2.Attack then -1
+     else if c1.Attack > c2.Attack then 1
+     else 0
+
+let sorted = List.sortWith compareCreatures creatures
+List.iter(fun i -> printfn "item %s" i.Name)  sorted 
+
+#!markdown
+
+## Pesquisar
+
+#!fsharp
+
+let list = [1; 2; 3; 4]
+let found = List.find( fun x -> x % 2 = 0) list 
+
+#!fsharp
+
+let findValue aValue aList =
+     let found = aList |> List.tryFind(fun item -> item = aValue)
+
+     match found with
+     | Some value -> printfn "%i" value
+     | None -> printfn "Not found"
+
+findValue 1 list // 1
+findValue 5 list // Not found
+
+#!fsharp
+
+let found = List.tryFindIndex(fun x -> x = 4) list
+match found with
+   | Some index -> printfn "%i" index
+   | None -> printfn "Not found"
+
+#!fsharp
+
+let sum = List.sum [1 .. 5] // sum = 15 
+
+#!fsharp
+
+type OrderItem = { Name: string; Cost:int }
+
+let orderItems = [
+       { Name="XBox"; Cost=500 }
+       { Name="Book"; Cost=10 }
+       { Name="Movie ticket"; Cost=7 }
+     ]
+
+let sum = List.sumBy( i -> i.Cost) orderItems
+printfn "%i" sum // 517
+
+#!fsharp
+
+let numbers = [ 10.0; 25.0; 30.0 ]
+let avg = List.average numbers
+printfn "%f" avg // 2.166667
