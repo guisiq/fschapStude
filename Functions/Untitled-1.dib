@@ -1,0 +1,23 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":"csharp"},{"aliases":["frontend"],"name":"vscode"}]}}
+
+#!fsharp
+
+let rec calculaJuros (juros:float)  (mount:float) (action:float->float->float) (interacao:int)  (meta:float) =
+    match mount with
+    |var1 when var1 >= meta ->  (interacao,mount)
+    |var1 when var1 < 0 -> (interacao,mount)
+    |_ -> calculaJuros juros (action mount juros) (action)  (interacao+1)  meta  
+
+#!fsharp
+
+let jurosFun (mount:float) (juros:float) = (mount*(1.+juros))+2000.0
+
+#!fsharp
+
+let calculo = calculaJuros ((1.12*0.7)/100.0) 3500 jurosFun
+
+#!fsharp
+
+calculo 0 35000

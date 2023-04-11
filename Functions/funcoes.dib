@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"name":"fsharp","languageName":"F#","aliases":["f#","F#"]},{"name":"vscode","aliases":["frontend"],"languageName":null},{"name":".NET","aliases":[]},{"name":"javascript","languageName":"JavaScript","aliases":["js"]},{"name":"webview","aliases":[]}]}}
+{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"aliases":[],"name":".NET"},{"aliases":["F#","f#"],"languageName":"F#","name":"fsharp"},{"aliases":["js"],"languageName":"JavaScript","name":"javascript"},{"aliases":["frontend"],"name":"vscode"},{"aliases":[],"name":"webview"}]}}
 
 #!markdown
 
@@ -51,23 +51,19 @@ let cardFace (card:int) :string =
 
 #!fsharp
 
-let rec calculaJuros (juros:float) (meta:float) (action:float->float->float) (interacao:int) (mount:float)  =
+let rec calculaJuros (juros:float) (meta:float) (action:float->float->float) (interacao:int) (mount:float) =
     match mount with
     |var1 when var1 >= meta ->  (interacao,mount)
     |var1 when var1 < 0 -> (interacao,mount)
-    |_ -> calculaJuros juros meta action (interacao+1) (action mount juros)  
+    |_ -> calculaJuros juros meta action (interacao+1) (action mount juros)
 
 #!fsharp
 
-let jurosFun (mount:float) (juros:float) = (mount*(1.+juros))+1500.0
+let jurosFun (mount:float) (juros:float) = (mount*(1.+juros))+1800.0
 
 #!fsharp
 
 let calculo = calculaJuros (1.12/100.0) 10000 jurosFun
-
-#!fsharp
-
-calculo
 
 #!fsharp
 
