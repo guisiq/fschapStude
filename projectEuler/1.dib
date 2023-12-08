@@ -1,0 +1,164 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":"csharp"},{"aliases":[],"languageName":"fsharp","name":"fsharp"}]}}
+
+#!fsharp
+
+// multiplos de 3  de 1 a 100 
+// 3, 6, 9, 12, 15, 18, 21, 24, 27, 30 , 33, 36, 39, 42, 45, 48, 51, 54, 57, 60 , 63, 66, 69, 72, 75, 78, 81, 84, 87, 90 , 93, 96, 99
+// multiplos de 5 de 1 a 100
+// 5, 10, 15, 20, 25, 30 , 35, 40, 45, 50 , 55, 60 , 65, 70, 75, 80, 85, 90 , 95, 100
+// funcao que soma os multiplos de 3  1 a ate o limite
+
+// pensado de forma imperativa
+let rec somaMultiplos multiplo limite =
+    let rec aux soma contador =
+        printfn "%d" (contador*multiplo)
+        match contador with
+        | x when x*multiplo > limite -> soma
+        | _ -> aux (soma + contador*multiplo) (contador + 1)
+    aux 0 1
+
+somaMultiplos 2 50
+
+#!fsharp
+
+//formula da PA 
+// soma = (a1 + an)*n/2
+// onde n e o numero de elementos da PA ex: 
+// formula da PG
+// soma = a1*(q^n - 1)/(q - 1)
+// formula da soma dos multiplos 
+// soma = ((a1 + an)*n/2)*multiplo onde n e o divisor do ultimo multiplo de multiplo ex 99/3 = 33  
+//definindo limite 
+let limite x = 
+    x/3 
+
+#!fsharp
+
+limite 100
+
+#!fsharp
+
+limite 99
+    |> printfn "%A" 
+
+#!fsharp
+
+printf "%A" 
+    <|(limite 100)*  3
+
+#!fsharp
+
+//definindo soma dos multiplos 
+let somaMultiplosF multiplo limite =
+    let MaiorMultiploDivisor = (limite-1)/multiplo
+    ((1 + MaiorMultiploDivisor)*MaiorMultiploDivisor/2)*multiplo
+somaMultiplosF 3 10
+
+#!fsharp
+
+//caso de uso  3 5 para 50
+//os multiplos sao 15 ,30,45
+//soma dos multiplos 15+30+45 = 90
+printf "%A" 
+    <|(somaMultiplosF 3 50)
+
+#!fsharp
+
+ 
+printf "%A" 
+    <|(somaMultiplosF 5 50)
+printf "/n" 
+     
+printf "%A" 
+    <|(somaMultiplos 5 50)
+
+#!fsharp
+
+//compara os resultados das funcoes somaMultiplos e somaMultiplosF e implime os resultados diferentes 
+let rec comparaSomaMultiplos multiplo limite =
+    match limite with
+    | x when x < 1 -> printfn "fim"
+    | _ -> 
+        let soma1 = somaMultiplos multiplo limite
+        let soma2 = somaMultiplosF multiplo limite
+        if soma1 <> soma2 then
+            printfn "multiplo %A limite %A soma1 %A soma2 %A" multiplo limite soma1 soma2
+        comparaSomaMultiplos multiplo (limite - 1)
+comparaSomaMultiplos 3 100
+
+#!fsharp
+
+// 3
+//     5
+// 6
+// 9
+//     10
+// 12
+// 15  15
+// 18
+//     20
+// 21
+// 24
+//     25
+// 27
+// 30  30
+// 33
+//     35
+// 36
+// 39
+//     40
+// 42
+// 45  45
+// 48
+//     50
+// 408 275 90
+// primeiro multiplo 15
+// soma so multiplos comuns 90
+// 408-275 = 133
+// 408+275-90 = 593
+// 408+275 = 683
+// 15+30+45 = 90
+
+#!markdown
+
+> solucao final 
+
+#!fsharp
+
+let somaMultiplosdeDoisNumeros multiplo1 multiplo2 limite =
+    //from https://www.quora.com/How-do-you-find-the-greatest-common-factor-GCF-of-two-expressions-without-factoring-expanding-them-first-like-in-math
+    let rec gcd a b =
+        match a,b with
+        | _,0 -> a
+        | _ -> gcd b (a % b)
+    let lcm a b =
+        match a,b with
+        | 0,_ | _,0 -> 0
+        | _ -> abs (a * b) / (gcd a b)
+    let somaMultiplosF multiplo limite =
+        let MaiorMultiploDivisor = (limite-1)/multiplo
+        ((1 + MaiorMultiploDivisor)*MaiorMultiploDivisor/2)*multiplo
+        
+    (somaMultiplosF multiplo1 limite) + somaMultiplosF multiplo2 limite - somaMultiplosF (lcm multiplo1 multiplo2) limite
+somaMultiplosdeDoisNumeros 3 5 1000
+
+#!fsharp
+
+somaMultiplosdeDoisNumeros 3 5 1000
+
+#!fsharp
+
+ 
+printf "%A" 
+    <|(somaMultiplosF 3 1000)
+
+printfn "" 
+     
+printf "%A" 
+    <|(somaMultiplosF 5 1000)
+printfn "" 
+
+printf "%A" 
+    <|(somaMultiplosF 15 1000)

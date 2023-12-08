@@ -1,6 +1,6 @@
 #!meta
 
-{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"aliases":[],"name":".NET"},{"aliases":["F#","f#"],"languageName":"F#","name":"fsharp"},{"aliases":["js"],"languageName":"JavaScript","name":"javascript"},{"aliases":["frontend"],"name":"vscode"},{"aliases":[],"name":"webview"}]}}
+{"kernelInfo":{"defaultKernelName":"csharp","items":[{"aliases":[],"name":".NET"},{"aliases":[],"name":"csharp"},{"aliases":["F#","f#"],"languageName":"F#","name":"fsharp"},{"aliases":["js"],"languageName":"JavaScript","name":"javascript"},{"aliases":["frontend"],"name":"vscode"},{"aliases":[],"name":"webview"}]}}
 
 #!markdown
 
@@ -51,19 +51,78 @@ let cardFace (card:int) :string =
 
 #!fsharp
 
-let rec calculaJuros (juros:float) (meta:float) (action:float->float->float) (interacao:int) (mount:float) =
+// let rec calculaJuros (action:float->float->float) (interacao:int) (juros:float)   (mount:float) (meta:float)   =
+//     match mount with
+//     |var1 when var1 >= meta ->  (interacao,mount)
+//     |var1 when var1 < 0 -> (interacao,mount)
+//     |_ -> calculaJuros action (interacao+1) juros    (action mount juros) meta
+//                        juros   meta         action    interacao           mount
+
+let rec calculaJuros (action:float->float->float) (interacao:int) (juros:float) (mount:float) (meta:float) =
     match mount with
-    |var1 when var1 >= meta ->  (interacao,mount)
-    |var1 when var1 < 0 -> (interacao,mount)
-    |_ -> calculaJuros juros meta action (interacao+1) (action mount juros)
+    |var1 when var1 >= meta ->  printfn "Interacao: %d, Montante: %f" interacao mount; (interacao,mount)
+    |var1 when var1 < 0 -> printfn "Interacao: %d, Montante: %f" interacao mount; (interacao,mount)
+    |_ -> printfn "Interacao: %d, Montante: %f" interacao mount; calculaJuros action (interacao+1) juros (action mount juros) meta
+
+let rec calculaJurosReverso (action:float->float->float) (interacao:int) (juros:float) (mount:float) =
+    match mount with
+    |var1 when var1 <= 0 -> printfn "Interacao: %d, Montante: %f" interacao mount; (interacao,mount)
+    |_ -> printfn "Interacao: %d, Montante: %f" interacao mount; calculaJurosReverso action (interacao+1) juros (action mount juros)
 
 #!fsharp
 
-let jurosFun (mount:float) (juros:float) = (mount*(1.+juros))+1800.0
+let jurosFun (mount:float) (juros:float) = (mount*(1.+juros))+1600.0
+let jurosFun2 (mount:float) (juros:float) = (mount*(1.+juros))+4000.0
+let jurosFun3 (mount:float) (juros:float) = (mount*(1.+juros))
 
 #!fsharp
 
-let calculo = calculaJuros (1.12/100.0) 10000 jurosFun
+let mout1 =  calculaJuros jurosFun  0  (1.20/100.0) 4500.0 50000
+mout1
+
+#!fsharp
+
+let mout2 = calculaJuros jurosFun2 (fst mout1)  (1.20/100.0) (snd mout1)  350000 
+mout2
+
+#!fsharp
+
+let mout3 = calculaJuros jurosFun2 (fst mout2)  (1.20/100.0) (snd mout2)  725000 
+mout3
+
+#!fsharp
+
+let mout4 = calculaJuros jurosFun2 (fst mout3)  (1.20/100.0) (snd mout3)  1000000 
+mout4
+
+#!fsharp
+
+let jurosFun4 (mount:float) (juros:float) = (mount*(1.+juros))-8700.0
+let mout5 = calculaJurosReverso jurosFun4 0  (1.20/100.0) (snd mout4)
+
+#!fsharp
+
+((4700+2959+4000)-4000)
+
+#!fsharp
+
+((4700)-1600)/30
+
+#!fsharp
+
+2500/30
+
+#!fsharp
+
+3164.11+1557.70-(1181.60+580.36)
+
+#!fsharp
+
+1.0*1.0087**12
+
+#!fsharp
+
+700000.0*0.0087
 
 #!fsharp
 

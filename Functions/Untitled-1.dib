@@ -4,19 +4,23 @@
 
 #!fsharp
 
-let rec calculaJuros (juros:float)  (mount:float) (action:float->float->float) (interacao:int)  (meta:float) =
+let rec calculaJuros (juros:float)  (mount:float) (action:float->int->float) (interacao:int)  (meta:float) =
     match mount with
     |var1 when var1 >= meta ->  (interacao,mount)
     |var1 when var1 < 0 -> (interacao,mount)
-    |_ -> calculaJuros juros (action mount juros) (action)  (interacao+1)  meta  
+    |_ -> calculaJuros juros (action mount interacao) (action)  (interacao+1)  meta  
 
 #!fsharp
 
-let jurosFun (mount:float) (juros:float) = (mount*(1.+juros))+2000.0
+let jurosFun (mount:float) (interacao:int) = 
+    match interacao with 
+    |var1 when var1 <= 4 ->(mount*(1.+ (0.0107*1.12 )))+1500.0
+    |var1 when var1 <= 8 ->(mount*(1.+ (0.0107*1.09 )))+1500.0
+    |_ ->(mount*(1.+ (0.0107*1.08 )))+4500.0
 
 #!fsharp
 
-let calculo = calculaJuros ((1.12*0.7)/100.0) 3500 jurosFun
+let calculo = calculaJuros ((1.07)/100.0) 2000.0 jurosFun
 
 #!fsharp
 
