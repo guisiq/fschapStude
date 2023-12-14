@@ -1,0 +1,81 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"aliases":[],"languageName":"fsharp","name":"fsharp"}]}}
+
+#!markdown
+
+$$
+U(\inftm, x) = \frac{x}{(1 - x)^2}
+$$
+
+#!fsharp
+
+//https://chat.openai.com/share/6d333894-e442-48f3-a4db-eafd29b6156d
+let U x:double = x/(1.0-x)**2.0
+
+U -100.0
+
+#!markdown
+
+$$
+ solver(m) = \frac{(2m + 1) \pm \sqrt{(2m + 1)^2 - 4m^2}}{2m} 
+$$
+
+#!fsharp
+
+let solve m:double = ((m*2.0 + 1.0) - sqrt((m*2.0 + 1.0)**2.0 - 4.0*m**2.0))/2.0*m
+
+#!fsharp
+
+solve -2.0
+
+#!fsharp
+
+let solve (m:double) =
+    let a = m
+    let b:double = -(2.0 * m + 1.0)
+    let c = m
+    let discriminant = b ** 2.0 - 4.0 * a * c
+    match discriminant with
+    | _ when discriminant < 0.0 -> None
+    | _ ->
+        let root1 = (-b + sqrt(discriminant)) / (2.0 * a)
+        let root2 = (-b - sqrt(discriminant)) / (2.0 * a)
+        match root1, root2 with
+        | _ when root1 < 1.0 -> Some root1
+        | _ when  root2 < 1.0 -> Some root2
+        | _ -> None
+
+    // if discriminant >= 0.0 then
+    //     let root1 = (-b + sqrt(discriminant)) / (2.0 * a)
+    //     let root2 = (-b - sqrt(discriminant)) / (2.0 * a)
+    //     if root1 > 0.0 && root1 < 1.0 then
+    //         Some root1
+    //     elif root2 > 0.0 && root2 < 1.0 then
+    //         Some root2
+    //     else
+    //         None
+// else
+    //     None
+solve 2.0
+
+#!csharp
+
+solve -0.5
+
+#!fsharp
+
+let solve(m: double): double =
+    let a = m
+    let b:double = -(2.0 * m + 1.0)
+    let c = m
+    let discriminant = b ** 2.0 - 4.0 * a * c
+    match discriminant with
+    | _ when discriminant < 0.0 -> Some None
+    | _ ->
+        let root1 = (-b + sqrt(discriminant)) / (2.0 * a)
+        let root2 = (-b - sqrt(discriminant)) / (2.0 * a)
+        match root1, root2 with
+        | _ when root1 < 1.0 -> Some root1
+        | _ when  root2 < 1.0 -> Some root2
+        | _ -> None

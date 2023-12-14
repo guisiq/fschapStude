@@ -1,0 +1,79 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"aliases":[],"languageName":"fsharp","name":"fsharp"}]}}
+
+#!fsharp
+
+let rec squaresInRect x y =
+    printfn "%d %d" x y
+    match x,y with 
+    | x , y when x < 0 || y < 0 -> raise ( Exception("deu ruim"))
+    | x , y when x > y -> y::(squaresInRect y (x-y))
+    | x , y when x < y -> x::(squaresInRect x (y-x))
+    | x , y when x = y -> [y]
+    | _ -> []
+
+squaresInRect 3 5
+
+#!fsharp
+
+montarArr 6 10
+
+#!fsharp
+
+//tentando usar otmisacao de cauda
+let rec squaresInRect x y =
+    let rec montarArr x y acc:list<int> =
+        // printfn "%d %d" x y
+        match x,y with 
+        | x , y when x < 0 || y < 0 -> raise ( Exception("deu ruim"))
+        | x , y when x > y -> (montarArr y (x-y) (acc@[y]))
+        | x , y when x < y -> (montarArr x (y-x) (acc@[x]))
+        | x , y when x = y -> (acc@[y])
+        | _ -> acc
+    montarArr x y []
+
+#!fsharp
+
+squaresInRect 6 10 
+
+#!fsharp
+
+let rec squaresInRect x y =
+    let rec montarArr x y acc =
+        // printfn "%d %d" x y
+        match x,y with 
+        | x , y when x < 0 || y < 0 -> None 
+        | x , y when x > y -> Some (montarArr y (x-y) (acc@[y])) |> Option.flatten
+        | x , y when x < y -> Some (montarArr x (y-x) (acc@[x])) |> Option.flatten
+        | x , y when x = y -> Some (acc@[y]) 
+        | _ -> Some acc 
+    match x , y with 
+    | x , y when x = y -> None
+    |_ -> montarArr x y []
+
+#!fsharp
+
+squaresInRect 5 5
+
+#!fsharp
+
+//sem usar o @
+let rec squaresInRect x y =
+    let rec montarArr x y acc =
+        // printfn "%d %d" x y
+        match x,y with 
+        | x , y when x > y -> (montarArr y (x-y) (y::acc)) 
+        | x , y when x < y -> (montarArr x (y-x) (x::acc)) 
+        | x , y when x = y -> (y::acc) 
+        | _ -> acc 
+    match x , y with 
+    | x , y when x = y -> None
+    | x , y when x < 0 || y < 0 -> None
+    |_ -> Some (List.rev (montarArr x y []))
+        
+        
+
+#!fsharp
+
+squaresInRect 5 3 

@@ -1,0 +1,62 @@
+#!meta
+
+{"kernelInfo":{"defaultKernelName":"fsharp","items":[{"aliases":[],"languageName":"fsharp","name":"fsharp"}]}}
+
+#!fsharp
+
+let FromRoman (romanNumeral: string) = 
+    romanNumeral
+    |> Seq.map (fun c -> 
+        match c with
+        | 'I' -> 1
+        | 'V' -> 5
+        | 'X' -> 10
+        | 'L' -> 50
+        | 'C' -> 100
+        | 'D' -> 500
+        | 'M' -> 1000
+        | _ -> failwith "Invalid Roman Numeral"
+    )
+    |> Seq.reduceBack (fun x acc ->
+        // imprimindo uma memoria de calculo 
+        //printfn "acc: %d, x: %d" acc x 
+        match acc, x with
+        // | acc, x when x < acc -> acc - x
+        // acc: 500, x: 100
+        | acc, x when 2*x < abs ( x - acc )   -> acc - x
+        | acc, x -> acc + x
+    )
+
+#!fsharp
+
+FromRoman "MCMXC" // 1990
+
+#!fsharp
+
+FromRoman "MCMXCC" // 1990
+
+#!fsharp
+
+FromRoman "MCMXCC" // 1990
+
+#!fsharp
+
+printfn "%d" <| FromRoman "MM"      //-> 2000
+printfn "%d" <| FromRoman "MDCLXVI" //-> 1666
+printfn "%d" <| FromRoman "M"       //-> 1000
+printfn "%d" <| FromRoman "CD"      //->  400
+printfn "%d" <| FromRoman "XC"      //->   90
+printfn "%d" <| FromRoman "XL"      //->   40
+printfn "%d" <| FromRoman "I"       //->    1
+
+#!fsharp
+
+printfn "%d" <| FromRoman "VVVLVV"    //->   23
+
+#!fsharp
+
+FromRoman "XL" 
+
+#!fsharp
+
+FromRoman "MDCLXVI" //-> 1666
