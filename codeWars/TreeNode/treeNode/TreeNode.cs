@@ -23,7 +23,52 @@ public class TreeNode<T> where T : notnull, IComparable
         this.Value = Value;
     }
 
-    public static TreeNode<T> buildTree(Func<T, IEnumerable<T>> Next, T value = default, int Depth = -1,Dictionary<T,TreeNode<T>> root = null)
+
+}
+public static class TreeNodehelper
+{
+    public static IEnumerable<TreeNode<T>> InvertTree<T>(this TreeNode<T> node) where T : notnull, IComparable
+    {
+        var result = new List<TreeNode<T>>();
+
+        if (node == null)
+        {
+            return result;
+        }
+        else
+        {
+            if (node.Children != null)
+            {
+                node.Children.Select(child =>
+                {
+                    if (child?.Children != null && child.Children.Count() > 0)
+                    {
+                        result.AddRange(InvertTree(child));
+                        ((List<TreeNode<T>>)child.Children).Add(node);
+                        return null;
+                    }
+                    else
+                    {
+                        child.Children = new List<TreeNode<T>> { node };
+                        return child;
+                    }
+                }).Where(x => x != null).ToList().ForEach(x => result.Add(x));
+                node.Children = new List<TreeNode<T>>();
+            }
+            return result;
+        }
+    }
+    public static string PrintTreeforplantUML<T>(this TreeNode<T> node) where T : notnull, IComparable
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("@startuml");
+        //node?.root?.Keys?.ToList().ForEach(x => sb.AppendLine("class no" + x + " {}"));
+        node?.root?.Values?.OrderBy(x => x.Value).ToList().ForEach(x => x.Children?.ToList().ForEach(y => sb.AppendLine("(no" + x.Value + ") --> " + "(no" + y.Value+")")));
+        sb.AppendLine("@enduml");
+        return sb.ToString();
+    }
+
+    public static TreeNode<T> BuildTree<T>(Func<T, IEnumerable<T>> Next, T value = default, int Depth = -1, Dictionary<T, TreeNode<T>>? root = null) where T : notnull, IComparable
     {
 
         TreeNode<T> newNode ;
@@ -55,76 +100,10 @@ public class TreeNode<T> where T : notnull, IComparable
             }
             else
             {
-                newNode.Children = orderedNextValues?.Select(x => buildTree(Next, value:x, Depth - 1, root)).ToImmutableList();
+                newNode.Children = orderedNextValues?.Select(x => BuildTree(Next, value:x, Depth - 1, root)).ToImmutableList();
                 return newNode;
             }
         }
     }
-    public List<TreeNode<T>> InvertTree(){
-        return InvertTree(this);
-    }
-    public static List<TreeNode<T>> InvertTree(TreeNode<T> node)
-    {
-        var result = new List<TreeNode<T>>();
-
-        if (node == null)
-        {
-            return result;
-        }
-        else
-        {
-            if (node.Children != null)
-            {
-                node.Children.Select(child =>
-                {
-                    if (child?.Children != null && child.Children.Count() > 0)
-                    {
-                        result.AddRange(InvertTree(child));
-                        ((List<TreeNode<T>>)child.Children).Add(node);
-                        return null;
-                    }
-                    else
-                    {
-                        child.Children = new List<TreeNode<T>> { node };
-                        return child;
-                    }
-                }).Where(x => x != null).ToList().ForEach(x => result.Add(x));
-                node.Children = new List<TreeNode<T>>();
-            }
-            return result;
-        }
-    }
-
-    public static String PrintTreeforplantUML(TreeNode<T> node)
-    {
-        var sb = new StringBuilder();
-        sb.AppendLine("@startuml");
-        //node?.root?.Keys?.ToList().ForEach(x => sb.AppendLine("class no" + x + " {}"));
-        node?.root?.Values?.OrderBy(x => x.Value).ToList().ForEach(x => x.Children?.ToList().ForEach(y => sb.AppendLine("(no" + x.Value + ") --> " + "(no" + y.Value+")")));
-        sb.AppendLine("@enduml");
-        return sb.ToString();
-
-        // if (node == null)
-        // {
-        //     return "";
-        // }
-
-        // var result = new StringBuilder();
-        // result.AppendLine($"class no{node.Value} {{}}");
-
-        // if (node.Children != null)
-        // {
-        //     foreach (var child in node.Children)
-        //     {
-        //         result.AppendLine($"no{node.Value} -- no{child.Value}");
-        //         result.AppendLine(PrintTreeforplantUML(child));
-        //     }
-        // }
-
-        // return result.ToString();
-
-    }
-    
-
 
 }
