@@ -99,8 +99,8 @@ public class TreeNode<T> where T : notnull, IComparable
     {
         var sb = new StringBuilder();
         sb.AppendLine("@startuml");
-        node?.root?.Keys?.ToList().ForEach(x => sb.AppendLine("class no" + x + " {}"));
-        node?.root?.Values?.ToList().ForEach(x => x.Children?.ToList().ForEach(y => sb.AppendLine("no" + x.Value + " --> " + "no" + y.Value)));
+        //node?.root?.Keys?.ToList().ForEach(x => sb.AppendLine("class no" + x + " {}"));
+        node?.root?.Values?.OrderBy(x => x.Value).ToList().ForEach(x => x.Children?.ToList().ForEach(y => sb.AppendLine("(no" + x.Value + ") --> " + "(no" + y.Value+")")));
         sb.AppendLine("@enduml");
         return sb.ToString();
 
